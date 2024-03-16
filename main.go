@@ -11,15 +11,21 @@ func main() {
 		os.Exit(0)
 	}
 
+	repo := Repository{}
+
 	firstArg := os.Args[1]
 	switch firstArg {
 	case "init":
-		if !validArgs(os.Args, 2) {
-			fmt.Println("错误的命令")
+		if !validArgs(os.Args, 2) { //检查参数是否正确
 			os.Exit(0)
 		}
 		//调用init函数
-		Repository.init()
+		repo.init()
+
+	case "add":
+		if !validArgs(os.Args, 3) {
+			os.Exit(0)
+		}
 
 	}
 
