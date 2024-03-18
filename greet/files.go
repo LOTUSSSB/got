@@ -1,4 +1,4 @@
-package got
+package greet
 
 import (
 	"bufio"
@@ -12,7 +12,7 @@ type File struct {
 }
 
 // 接受一个文件名，返回一个File对象，对象可与写入很多地方
-func writeContents(filePath string, contents ...interface{}) error {
+func WriteContents(filePath string, contents ...interface{}) error {
 	// 打开文件，使用读写模式，文件权限为0644
 	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {

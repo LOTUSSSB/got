@@ -1,7 +1,6 @@
-package got
+package greet
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -43,9 +42,9 @@ type Repository struct {
 }
 
 // 创建一个init函数，使得他能被main调用，这个init函数功能是初始化got目录
-func (r *Repository) init() {
+func (r *Repository) Init() {
 
-	//检查是否已经初始化，若程序继续执行，表示在初始化的got目录下
+	//检查是否已经初始化，若未初始化则创建文件夹
 	r.checkIfInitialized()
 
 	os.Mkdir(GotDir, 0755)
@@ -63,11 +62,15 @@ func (r *Repository) init() {
 
 }
 
+// 检查是否已经初始化，若未初始化则继续执行Init程序
 func (r *Repository) checkIfInitialized() {
-	if _, err := os.Stat(GotDir); os.IsNotExist(err) {
-		fmt.Println("Not in an initialized Gitlet directory.")
+	//如果.Got文件夹已经存在，则打印已经初始化
+	if _, err := os.Stat(GotDir); err == nil {
+		println("Already initialized")
 		os.Exit(0)
 	}
+	//如果.Got文件夹不存在，则继续执行init函数
+	//Init()
 }
 
 func (r *Repository) initcommit() {
@@ -81,7 +84,9 @@ func (r *Repository) initcommit() {
 // 它指示当前所在的分支。在这个方法中，通过调用writeContents函数将"master"写入HEAD文件。
 func (r *Repository) initHEAD() {
 	//调用writeContents函数，将"master"写入gotdir下的HEAD文件
-	writeContents(HEAD_FILE, "master")
+	//writeContents(HEAD_FILE, "master")
+	//调用files.go中的writeContents函数
+	WriteContents(HEAD_FILE, "master")
 
 }
 
@@ -91,7 +96,13 @@ func (r *Repository) initHeads() {
 	files, _ := filepath.Glob(HEADS_DIR + "/*")
 	//如果文件列表为空，调用writeContents函数，将currentCommit.ID写入HEADS_DIR下的master文件
 	if len(files) == 0 {
-		writeContents(filepath.Join(HEADS_DIR, "master"), currentCommit.ID)
+		WriteContents(filepath.Join(HEADS_DIR, "master"), currentCommit.ID)
 	}
+
+}
+
+func (r *Repository) Add(filePath string) {
+	//调用add.go中的add函数
+	//add(filePath)
 
 }

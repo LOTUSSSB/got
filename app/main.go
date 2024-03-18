@@ -1,7 +1,8 @@
-package got
+package main
 
 import (
 	"fmt"
+	"main/greet"
 	"os"
 )
 
@@ -11,7 +12,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	repo := Repository{}
+	repo := greet.Repository{}
 
 	firstArg := os.Args[1]
 	switch firstArg {
@@ -20,12 +21,14 @@ func main() {
 			os.Exit(0)
 		}
 		//调用init函数
-		repo.init()
+		repo.Init()
 
 	case "add":
 		if !validArgs(os.Args, 3) {
 			os.Exit(0)
 		}
+		//调用add函数
+		repo.Add(os.Args[2])
 
 	}
 

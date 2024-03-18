@@ -1,4 +1,4 @@
-package got
+package greet
 
 import (
 	"crypto/sha1"
@@ -73,5 +73,6 @@ func generateID(message string, parents []string, pathToBlobID map[string]string
 
 // 编写generateFileName函数，内含OBJECT_DIR,ID 用于生成commit对象的保存文件名
 func generateFileName() string {
+	//return fmt.Sprintf("%s/%s", main.OBJECT_DIR, generateID)
 	return fmt.Sprintf("%s/%s", OBJECT_DIR, generateID)
 }
