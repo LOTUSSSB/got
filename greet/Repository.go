@@ -9,7 +9,7 @@ import (
 // join函数将多个字符串连接成一个路径
 var (
 	CWD              = os.Getenv("PWD")
-	GotDir           = filepath.Join(CWD, ".got")
+	GotDir           = filepath.Join(CWD, ".got") //返回相对路径
 	OBJECT_DIR       = filepath.Join(GotDir, "objects")
 	RefsDir          = filepath.Join(GotDir, "refs")
 	HEADS_DIR        = filepath.Join(RefsDir, "heads")
@@ -99,6 +99,13 @@ func (r *Repository) initHeads() {
 		WriteContents(filepath.Join(HEADS_DIR, "master"), currentCommit.ID)
 	}
 
+}
+
+func (r *Repository) Commit(message string) {
+	//调用commit.go中的NewCommit函数
+	//NewCommit(message, currentCommit.PathToBlobID, []string{currentCommit.ID})
+	//调用commit.go中的NewCommit函数
+	NewCommit(message, currentCommit.PathToBlobID, []string{currentCommit.ID})
 }
 
 func (r *Repository) Add(filePath string) {

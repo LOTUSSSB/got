@@ -26,6 +26,12 @@ func NewCommit(message string, pathToBlobID map[string]string, parents []string)
 	timeStamp := currentTime.Format(time.RFC3339)
 	id := generateID(message, parents, pathToBlobID)
 	commitSaveFileName := generateFileName()
+	//pathToBlobID是一个map，key是文件名，value是blobID
+	//parents是一个列表，存放的是当前commit的父commit的ID
+	//currenttime是当前时间
+	//timestamp是当前时间的格式化字符串
+	//id是commit对象的ID
+	//commitSaveFileName是commit对象的保存文件名
 
 	return &Commit{
 		Message:            message,
