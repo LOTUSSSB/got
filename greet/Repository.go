@@ -140,24 +140,24 @@ func storeBlob(blob *Blob) {
 	//		}
 	//	}
 
-	// 如果当前提交中不包含该 blob 或者删除阶段中已存在该 blob，则进行存储
-	if !currCommit.PathToBlobID.Contains(blob.BlobID) || !removeStage.isNewBlob(blob) {
-		if addStage.isNewBlob(blob) {
-			if removeStage.isNewBlob(blob) {
-				// 如果添加阶段和删除阶段都不存在该 blob，则进行存储并更新添加阶段
-				blob.save()
-				if addStage.isFilePathExists(blob.Path) {
-					addStage.delete(blob)
-				}
-				addStage.add(blob)
-				addStage.saveAddStage()
-			} else {
-				// 如果只有删除阶段存在该 blob，则在删除阶段中删除该 blob
-				removeStage.delete(blob)
-				removeStage.saveRemoveStage()
-			}
-		}
-	}
+	//// 如果当前提交中不包含该 blob 或者删除阶段中已存在该 blob，则进行存储
+	//if !currCommit.PathToBlobID.Contains(blob.BlobID) || !removeStage.isNewBlob(blob) {
+	//	if addStage.isNewBlob(blob) {
+	//		if removeStage.isNewBlob(blob) {
+	//			// 如果添加阶段和删除阶段都不存在该 blob，则进行存储并更新添加阶段
+	//			blob.save()
+	//			if addStage.isFilePathExists(blob.Path) {
+	//				addStage.delete(blob)
+	//			}
+	//			addStage.add(blob)
+	//			addStage.saveAddStage()
+	//		} else {
+	//			// 如果只有删除阶段存在该 blob，则在删除阶段中删除该 blob
+	//			removeStage.delete(blob)
+	//			removeStage.saveRemoveStage()
+	//		}
+	//	}
+	//}
 
 	//大概写个思路？ 感觉go不能一次性这样来，要不停的调用函数
 
