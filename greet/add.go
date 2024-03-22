@@ -56,22 +56,29 @@ func generateBlobSaveFileName(id string) string {
 	return fmt.Sprintf("%s/%s", OBJECT_DIR, id)
 }
 
-// 保存Blob对象
-func add(file string) {
-	fileName, _ := getFileFromCWD(file)
-	//if !exists(fileName) {
-	//	fmt.Println("File does not exist.")
-	//	os.Exit(0)
-	//}
-	//传入文件名查看文件是否存在
-	//如果文件不存在，打印文件不存在并退出
-	if _, err := os.Stat(fileName); os.IsNotExist(err) {
-		fmt.Printf("文件 %s 不存在\n", fileName)
-		os.Exit(1)
-	}
-	//blob := NewBlob(fileName)
-	//storeBlob(blob)
+//// 保存Blob对象
+//func add(file string) {
+//	fileName, _ := getFileFromCWD(file)
+//	//if !exists(fileName) {
+//	//	fmt.Println("File does not exist.")
+//	//	os.Exit(0)
+//	//}
+//	//传入文件名查看文件是否存在
+//	//如果文件不存在，打印文件不存在并退出
+//	if _, err := os.Stat(fileName); os.IsNotExist(err) {
+//		fmt.Printf("文件 %s 不存在\n", fileName)
+//		os.Exit(1)
+//	}
+//	blob := NewBlob(fileName)
+//	storeBlob(blob)
+//}
+
+// Add 将blob和文件路径关联并存储起来
+func (s *Stage) Add(blob Blob) {
+	s.PathToBlobID[blob.FilePath] = blob.ID
 }
+
+// Delete 删除blob和文件路径的关联
 
 // 获取文件的绝对路径
 func getFileFromCWD(file string) (string, error) {
@@ -83,33 +90,6 @@ func getFileFromCWD(file string) (string, error) {
 //func exists(file string) bool {
 //	// 检查文件是否存在
 //}
-
-// 保存Blob对象
-//func storeBlob(blob *Blob) {
-//	currCommit := readCurrCommit()
-//	addStage := readAddStage()
-//	removeStage := readRemoveStage()
-//	if !containsBlobID(currCommit.PathToBlobID, blob.ID) || !removeStage.isNewBlob(blob) {
-//		if addStage.isNewBlob(blob) {
-//			if removeStage.isNewBlob(blob) {
-//				blob.save()
-//				if addStage.isFilePathExists(blob.Path) {
-//					addStage.delete(blob)
-//				}
-//				addStage.add(blob)
-//				addStage.saveAddStage()
-//			} else {
-//				removeStage.delete(blob)
-//				removeStage.saveRemoveStage()
-//			}
-//		}
-//	}
-//}
-
-func readCurrCommit() interface{} {
-	//调用repository.go中的	currentCommit *Commit 指针
-	return currentCommit
-}
 
 // 传入文件名，生成blob对象的ID
 func generateBlobId(fileName string) string {

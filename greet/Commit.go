@@ -82,3 +82,8 @@ func generateFileName() string {
 	//return fmt.Sprintf("%s/%s", main.OBJECT_DIR, generateID)
 	return fmt.Sprintf("%s/%s", OBJECT_DIR, generateID)
 }
+
+// 获取最新的PathToBlobID
+func (c *Commit) GetPathToBlobID() map[string]string {
+	return c.PathToBlobID
+}

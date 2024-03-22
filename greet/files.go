@@ -6,11 +6,6 @@ import (
 	"os"
 )
 
-type File struct {
-	//文件名
-	Name string
-}
-
 // 接受一个文件名，返回一个File对象，对象可与写入很多地方
 func WriteContents(filePath string, contents ...interface{}) error {
 	// 打开文件，使用读写模式，文件权限为0644
