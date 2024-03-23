@@ -87,3 +87,23 @@ func generateFileName() string {
 func (c *Commit) GetPathToBlobID() map[string]string {
 	return c.PathToBlobID
 }
+
+func (c *Commit) isFilePathExists(path string) bool {
+	// 遍历PathToBlobID映射，如果存在与filePath相同的路径，则返回true
+	for k := range c.PathToBlobID {
+		if k == path {
+			return true
+		}
+	}
+	return false
+}
+
+func (c *Commit) isBlobIDExists(id string) bool {
+	// 遍历PathToBlobID映射，如果存在与id相同的blobID，则返回true
+	for _, v := range c.PathToBlobID {
+		if v == id {
+			return true
+		}
+	}
+	return false
+}

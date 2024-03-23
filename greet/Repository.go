@@ -115,51 +115,36 @@ func (r *Repository) Add(filePath string) {
 }
 
 // 保存Blob对象（将文件的路径和文件的blobID关联并存储起来）
-func storeBlob(blob *Blob) {
-	// 读取当前提交、添加阶段和删除阶段
+func storeBlob(blob Blob) {
 	currCommit := readCurrCommit().(*Commit)
-	addStage := readAddStage()
-	removeStage := readRemoveStage()
+	addStage := readAddStage().(*Stage)
+	removeStage := readRemoveStage().(*Stage)
+	if !containsValue(currCommit.PathToBlobID, blob.ID) || !removeStage.IsNewBlob(blob) {
+		if addStage.IsNewBlob(blob) {
+			if removeStage.IsNewBlob(blob) {
+				blob.Save()
+				if addStage.isFilePathExists(blob.FilePath) {
+					addStage.Delete(blob)
+				}
+				addStage.Add(blob)
+				addStage.SaveStage(ADDSTAGE_FILE)
+			} else {
+				removeStage.Delete(blob)
+				removeStage.SaveStage(REMOVESTAGE_FILE)
+			}
+		}
+	}
+}
 
-	//	// 如果当前提交中不包含该 blob 或者删除阶段中已存在该 blob，则进行存储
-	//	if !currCommit.PathToBlobID.Contains(blob.BlobID) || !removeStage.isNewBlob(blob) {
-	//		if addStage.isNewBlob(blob) {
-	//			if removeStage.isNewBlob(blob) {
-	//				// 如果添加阶段和删除阶段都不存在该 blob，则进行存储并更新添加阶段
-	//				blob.save()
-	//				if addStage.isFilePathExists(blob.Path) {
-	//					addStage.delete(blob)
-	//				}
-	//				addStage.add(blob)
-	//				addStage.saveAddStage()
-	//			} else {
-	//				// 如果只有删除阶段存在该 blob，则在删除阶段中删除该 blob
-	//				removeStage.delete(blob)
-	//				removeStage.saveRemoveStage()
-	//			}
-	//		}
-	//	}
-
-	//// 如果当前提交中不包含该 blob 或者删除阶段中已存在该 blob，则进行存储
-	//if !currCommit.PathToBlobID.Contains(blob.BlobID) || !removeStage.isNewBlob(blob) {
-	//	if addStage.isNewBlob(blob) {
-	//		if removeStage.isNewBlob(blob) {
-	//			// 如果添加阶段和删除阶段都不存在该 blob，则进行存储并更新添加阶段
-	//			blob.save()
-	//			if addStage.isFilePathExists(blob.Path) {
-	//				addStage.delete(blob)
-	//			}
-	//			addStage.add(blob)
-	//			addStage.saveAddStage()
-	//		} else {
-	//			// 如果只有删除阶段存在该 blob，则在删除阶段中删除该 blob
-	//			removeStage.delete(blob)
-	//			removeStage.saveRemoveStage()
-	//		}
-	//	}
-	//}
-
-	//大概写个思路？ 感觉go不能一次性这样来，要不停的调用函数
+// 检查Stage结构体的PathToBlobID映射中的路径是否与Blob结构体的FilePath字段对应
+func (s *Stage) isFilePathExists(filePath string) bool {
+	// 遍历PathToBlobID映射，如果存在与filePath相同的路径，则返回true
+	for k := range s.PathToBlobID {
+		if k == filePath {
+			return true
+		}
+	}
+	return false
 
 }
 
@@ -168,8 +153,11 @@ func readCurrCommit() interface{} {
 	return currentCommit
 }
 
-// 判断Blob是否为最新的
-func isNewBlob(blob *Blob) bool {
-	//调用blob.go中的isNewBlob函数
-	return isNewBlob(blob)
+func containsValue(m map[string]string, v string) bool {
+	for _, value := range m {
+		if value == v {
+			return true
+		}
+	}
+	return false
 }

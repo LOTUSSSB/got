@@ -61,3 +61,11 @@ func (s *Stage) IsNewBlob(blob Blob) bool {
 	}
 	return true
 }
+
+func (s *Stage) Delete(blob Blob) {
+	delete(s.PathToBlobID, blob.FilePath)
+}
+
+func (s *Stage) SaveStage(file string) {
+	WriteContents(file, s)
+}

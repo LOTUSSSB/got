@@ -16,6 +16,10 @@ type Blob struct {
 	BlobSaveFileName string
 }
 
+func (b Blob) Save() {
+	WriteContents(b.BlobSaveFileName, b.Bytes)
+}
+
 //func generateID(message string, parents []string, pathToBlobID map[string]string) string {
 //	// 生成commit对象的ID，用到message和parents，blobID
 //	// 用sha1加密
@@ -73,7 +77,7 @@ func generateBlobSaveFileName(id string) string {
 //	storeBlob(blob)
 //}
 
-// Add 将blob和文件路径关联并存储起来
+// Add 将blob和文件路径FilePath关联并存储起来
 func (s *Stage) Add(blob Blob) {
 	s.PathToBlobID[blob.FilePath] = blob.ID
 }
