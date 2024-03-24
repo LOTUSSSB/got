@@ -36,8 +36,13 @@ func main() {
 		}
 		repo.Commit(os.Args[2])
 
-	}
+	case "rm":
+		if !validArgs(os.Args, 2) {
+			os.Exit(0)
+		}
+		repo.Remove(os.Args[2])
 
+	}
 }
 
 // 生成字符串数组来检测输入的命令行参数数量是否正确

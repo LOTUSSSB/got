@@ -111,25 +111,33 @@ func (r *Repository) Commit(message string) {
 func (r *Repository) Add(filePath string) {
 	//调用add.go中的add函数
 	//add(filePath)
+	//调用add.go中的NewBlob函数
+	blob := NewBlob(filePath)
+	//调用storeBlob函数
+	storeBlob(blob)
+}
 
+func (r *Repository) Remove(filePath string) {
+	//调用remove.go中的remove函数
+	//remove(filePath)
 }
 
 // 保存Blob对象（将文件的路径和文件的blobID关联并存储起来）
-func storeBlob(blob Blob) {
+func storeBlob(blob *Blob) {
 	currCommit := readCurrCommit().(*Commit)
 	addStage := readAddStage().(*Stage)
 	removeStage := readRemoveStage().(*Stage)
-	if !containsValue(currCommit.PathToBlobID, blob.ID) || !removeStage.IsNewBlob(blob) {
-		if addStage.IsNewBlob(blob) {
-			if removeStage.IsNewBlob(blob) {
+	if !containsValue(currCommit.PathToBlobID, blob.ID) || !removeStage.IsNewBlob(*blob) {
+		if addStage.IsNewBlob(*blob) {
+			if removeStage.IsNewBlob(*blob) {
 				blob.Save()
 				if addStage.isFilePathExists(blob.FilePath) {
-					addStage.Delete(blob)
+					addStage.Delete(*blob)
 				}
-				addStage.Add(blob)
+				addStage.Add(*blob)
 				addStage.SaveStage(ADDSTAGE_FILE)
 			} else {
-				removeStage.Delete(blob)
+				removeStage.Delete(*blob)
 				removeStage.SaveStage(REMOVESTAGE_FILE)
 			}
 		}
